@@ -2,11 +2,15 @@ var AwsS3 = require("aws-sdk/clients/s3");
 
 const ACCESS_KEY_ID = "AKIA6OHOPCC5DWJXXO7O";
 const SECRET_ACCESS_KEY = "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";
-const BUCKET_NAME = "eyeknow-data";
-const Prefix = "Test/";
-const Delimiter = "/";
-const region = "us-east-1";
+// const BUCKET_NAME = "eyeknow-data";
+const BUCKET_NAME = "daycare.videos";
 
+// const Prefix = "Test/";
+const Prefix = "iland-guard/yamit/2020-12-09/cam_0/";
+
+const Delimiter = "/";
+// const region = "us-east-1";
+const region = "eu-north-1";
 const s3 = new AwsS3({
   accessKeyId: ACCESS_KEY_ID,
   secretAccessKey: SECRET_ACCESS_KEY,
@@ -14,6 +18,7 @@ const s3 = new AwsS3({
   Delimiter: Delimiter,
   Prefix: Prefix,
   region: region,
+  signatureVersion: "v4",
 });
 
 const s3params = {
@@ -23,20 +28,29 @@ const s3params = {
 };
 
 // s3.listObjectsV2(s3params, function (err, data) {
+//   let keyArray = [];
+
 //   if (err) console.log(err, err.stack);
-//   // an error occurred
 //   else {
-//     console.log(data.Contents[0].Key);
 //     let contents = data.Contents;
-//     let keyArray = [];
+
+//     // console.log(data.Contents);
 //     for (let i = 0; i < contents.length; i++) {
-//       keyArray.push(
-//         `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
-//       );
-//       //   keyArray.push(contents[i].Key);
+//       const signedParams = {
+//         Bucket: BUCKET_NAME,
+//         Key: contents[i].Key,
+//       };
+//       const url = s3.getSignedUrl("getObject", signedParams);
+//       keyArray.push(url);
+//       // keyArray.push(
+//       //   `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
+//       // );
+//       // keyArray.push(
+//       //   `https://s3.${region}.amazonaws.com/${BUCKET_NAME}/${contents[i].Key}`
+//       // );
 //     }
 //     console.log(keyArray);
-//   } // successful response
+//   }
 // });
 
 module.exports.list = (func) => {
@@ -44,48 +58,62 @@ module.exports.list = (func) => {
     let keyArray = [];
 
     if (err) console.log(err, err.stack);
-    // an error occurred
     else {
-      //   console.log(data.Contents[0].Key);
       let contents = data.Contents;
-      // let keyArray = [];
+
+      // console.log(data.Contents);
       for (let i = 0; i < contents.length; i++) {
-        keyArray.push(
-          `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
-        );
+        const signedParams = {
+          Bucket: BUCKET_NAME,
+          Key: contents[i].Key,
+        };
+        const url = s3.getSignedUrl("getObject", signedParams);
+        keyArray.push(url);
+        // keyArray.push(
+        //   `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
+        // );
+        // keyArray.push(
+        //   `https://s3.${region}.amazonaws.com/${BUCKET_NAME}/${contents[i].Key}`
+        // );
       }
       console.log(keyArray);
-      func(keyArray)
+      func(keyArray);
     }
   });
-  
 };
 
-// module.exports.list = (params) => {
-//   let promise = new Promise((resolve, reject) => {
-//     s3.listObjectsV2(s3params, (err, data) => {
-//       if (err) {
-//         reject(err);
-//         console.log(err);
-//       }
-//       resolve(data);
+// module.exports.list = (func) => {
+//   s3.listObjectsV2(s3params, function (err, data) {
+//     let keyArray = [];
 
-//       promise.then(
-//         (result) => (
-//            console.log("hello")
-//         ), // shows "done!" after 1 second
-//         (error) => console.log("ttt", error) // doesn't run
-//       );
-
+//     if (err) console.log(err, err.stack);
+//     else {
 //       let contents = data.Contents;
-//       let keyArray = [];
 //       for (let i = 0; i < contents.length; i++) {
 //         keyArray.push(
 //           `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
 //         );
-//         //   keyArray.push(contents[i].Key);
 //       }
-//       return keyArray;
-//     });
+//       console.log(keyArray);
+//       func(keyArray);
+//     }
+//   });
+// };
+
+// module.exports.listSigned = (func) => {
+//   s3.listObjectsV2(s3params, function (err, data) {
+//     let keyArray = [];
+
+//     if (err) console.log(err, err.stack);
+//     else {
+//       let contents = data.Contents;
+//       for (let i = 0; i < contents.length; i++) {
+//         keyArray.push(
+//           `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
+//         );
+//       }
+//       console.log(keyArray);
+//       func(keyArray);
+//     }
 //   });
 // };

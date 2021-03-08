@@ -7,8 +7,6 @@ router.get("/", async (req, res, next) => {
       console.log(videoURLs);
       console.log(typeof videoURLs);
       res.send(videoURLs);
-
-      // res.send({ urls: (videoURLs) });
     } catch (err) {
       console.log(err);
       res.status(403).send(err, "there was an err");
