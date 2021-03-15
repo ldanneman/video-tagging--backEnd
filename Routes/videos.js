@@ -41,93 +41,51 @@ router.get("/", async (req, res, next) => {
 //     .pipe(res, { end: true });
 // })
 
+////////
+
+// router.post("/download", (req, res, next) => {
+//   axios({
+//     method: "get",
+//     url: req.body.url,
+//     responseType: "arraybuffer",
+//   }).then(function (response) {
+//     console.log(response.data);
+//     var proc = new ffmpeg(response.data)
+//       .videoCodec("libx264")
+//       .outputOptions(["-movflags isml+frag_keyframe"])
+//       .toFormat("mp4")
+//       //.seekInput(offset) this is a problem with piping
+//       .on("error", function (err, stdout, stderr) {
+//         console.log("an error happened: " + err.message);
+//         // console.log("ffmpeg stdout: " + stdout);
+//         // console.log("ffmpeg stderr: " + stderr);
+//       })
+//       .on("end", function () {
+//         console.log("Processing finished !");
+//       })
+//       .on("progress", function (progress) {
+//         console.log("Processing: " + progress.percent + "% done");
+//       })
+//       // .pipe(response.data, { end: true });
+//       .pipe(fs.createWriteStream("./Assets/test53.mp4"));
+//   });
+// });
+
+//////
 router.post("/download", (req, res, next) => {
   axios({
     method: "get",
     url: req.body.url,
-    responseType: "stream",
+    responseType: "arraybuffer",
   }).then(function (response) {
-    var proc = new ffmpeg(response.data)
-      .outputOptions(["-movflags isml+frag_keyframe"])
-      .toFormat("mp4")
-      //.seekInput(offset) this is a problem with piping
-      .on("error", function (err, stdout, stderr) {
-        console.log("an error happened: " + err.message);
-        // console.log("ffmpeg stdout: " + stdout);
-        // console.log("ffmpeg stderr: " + stderr);
-      })
-      .on("end", function () {
-        console.log("Processing finished !");
-      })
-      .on("progress", function (progress) {
-        console.log("Processing: " + progress.percent + "% done");
-      })
-      // .pipe(res, { end: true })
-      .pipe(fs.createWriteStream("./Assets/test53.mp4"));
+    const data = new Uint8Array(Buffer.from(response.data));
+    fs.writeFile("Assets/test51.mp4", data, callback);
   });
+  const callback = (err) => {
+    if (err) throw err;
+    console.log("It's saved!");
+  };
 });
-
-// router.get("/strea", function (req, res) {
-//   res.sendFile(__dirname + "/index.html");
-// });
-
-// router.get("/stream", (req, res) => {
-//   res.sendFile("./test47.mp4", { root: __dirname });
-// });
-
-// router.get("/stream", function (req, res) {
-//   // Ensure there is a range given for the video
-//   const range = req.headers.range;
-//   if (!range) {
-//     res.status(400).send("Requires Range header");
-//   }
-
-//   // get video stats (about 61MB)
-//   const videoPath = "./test47.mp4";
-//   const videoSize = fs.statSync("./test47.mp4").size;
-
-//   // Parse Range
-//   // Example: "bytes=32324-"
-//   const CHUNK_SIZE = 10 ** 6; // 1MB
-//   const start = Number(range.replace(/\D/g, ""));
-//   const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
-
-//   // Create headers
-//   const contentLength = end - start + 1;
-//   const headers = {
-//     "Content-Range": `bytes ${start}-${end}/${videoSize}`,
-//     "Accept-Ranges": "bytes",
-//     "Content-Length": contentLength,
-//     "Content-Type": "video/mp4",
-//   };
-
-//   // HTTP Status 206 for Partial Content
-//   res.writeHead(206, headers);
-
-//   // create video read stream for this particular chunk
-//   const videoStream = fs.createReadStream(videoPath, { start, end });
-
-//   // Stream the video chunk to the client
-//   videoStream.pipe(res);
-// });
-
-// router.get("/strea", function (req, res) {
-//   res.sendFile(__dirname + "/index.html");
-// });
-
-// router.get("/stream", function (req, res) {
-//   const path =
-//     "C:\\Users\\levda\\Desktop\\EyeKnow\\EyeKnow-Backend\\test47.mp4";
-//   const stat = fs.statSync(path);
-//   const fileSize = stat.size;
-
-//   const head = {
-//     "Content-Length": fileSize,
-//     "Content-Type": "video/mp4",
-//   };
-//   res.writeHead(200, head);
-//   fs.createReadStream(path).pipe(res);
-// });
 
 router.get("/stream", function (req, res) {
   const path = "Assets/test47.mp4";
