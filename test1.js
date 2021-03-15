@@ -8,8 +8,8 @@ const promisify = require("util.promisify");
 const stream = require("stream");
 
 const url =
-//   "https://s3.eu-north-1.amazonaws.com/daycare.videos/iland-guard/yamit/2020-12-09/cam_0/20201209_043123.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6OHOPCC5DWJXXO7O%2F20210311%2Feu-north-1%2Fs3%2Faws4_request&X-Amz-Date=20210311T171653Z&X-Amz-Expires=900&X-Amz-Signature=5d5cb3bf3e1a30d20f515b8cc547bbaad694b98715bffa28863f8a2db42c8357&X-Amz-SignedHeaders=host";
-//   "https://res.cloudinary.com/coolps811/video/upload/v1615482718/u9wuqpleolmtotoyyfra.mp4";
+  //   "https://s3.eu-north-1.amazonaws.com/daycare.videos/iland-guard/yamit/2020-12-09/cam_0/20201209_043123.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6OHOPCC5DWJXXO7O%2F20210311%2Feu-north-1%2Fs3%2Faws4_request&X-Amz-Date=20210311T171653Z&X-Amz-Expires=900&X-Amz-Signature=5d5cb3bf3e1a30d20f515b8cc547bbaad694b98715bffa28863f8a2db42c8357&X-Amz-SignedHeaders=host";
+  //   "https://res.cloudinary.com/coolps811/video/upload/v1615482718/u9wuqpleolmtotoyyfra.mp4";
   "https://res.cloudinary.com/coolps811/image/upload/v1609684966/petproject/vkgrwhehp36ay9b2jy5c.png";
 //   "https://www.youtube.com/watch?v=ewOAsUWQJvo&ab_channel=AVROTROS";
 // "../../../Downloads/video.mp4";
@@ -58,10 +58,12 @@ const download3 = async () => {
 const download4 = () => {
   axios({
     method: "get",
-    url: url,
+    url:
+      "https://res.cloudinary.com/coolps811/video/upload/v1615482718/u9wuqpleolmtotoyyfra.mp4",
     responseType: "stream",
   }).then(function (response) {
-    response.data.pipe(fs.createWriteStream(`.Assets/${__dirname}.jpeg`));
+    response.data.pipe(fs.createWriteStream("./Assets/test50.mp4"));
+    console.log(response.data);
   });
 };
 download4();

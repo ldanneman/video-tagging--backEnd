@@ -53,6 +53,35 @@ const s3params = {
 //   }
 // });
 
+// module.exports.list = (func) => {
+//   s3.listObjectsV2(s3params, function (err, data) {
+//     let keyArray = [];
+
+//     if (err) console.log(err, err.stack);
+//     else {
+//       let contents = data.Contents;
+
+//       // console.log(data.Contents);
+//       for (let i = 0; i < contents.length; i++) {
+//         const signedParams = {
+//           Bucket: BUCKET_NAME,
+//           Key: contents[i].Key,
+//         };
+//         const url = s3.getSignedUrl("getObject", signedParams);
+//         keyArray.push(url);
+//         // keyArray.push(
+//         //   `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
+//         // );
+//         // keyArray.push(
+//         //   `https://s3.${region}.amazonaws.com/${BUCKET_NAME}/${contents[i].Key}`
+//         // );
+//       }
+//       console.log(keyArray);
+//       func(keyArray);
+//     }
+//   });
+// };
+
 module.exports.list = (func) => {
   s3.listObjectsV2(s3params, function (err, data) {
     let keyArray = [];
@@ -82,38 +111,21 @@ module.exports.list = (func) => {
   });
 };
 
-// module.exports.list = (func) => {
-//   s3.listObjectsV2(s3params, function (err, data) {
-//     let keyArray = [];
-
-//     if (err) console.log(err, err.stack);
-//     else {
-//       let contents = data.Contents;
-//       for (let i = 0; i < contents.length; i++) {
-//         keyArray.push(
-//           `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
-//         );
-//       }
-//       console.log(keyArray);
-//       func(keyArray);
-//     }
-//   });
-// };
-
-// module.exports.listSigned = (func) => {
-//   s3.listObjectsV2(s3params, function (err, data) {
-//     let keyArray = [];
-
-//     if (err) console.log(err, err.stack);
-//     else {
-//       let contents = data.Contents;
-//       for (let i = 0; i < contents.length; i++) {
-//         keyArray.push(
-//           `https://${BUCKET_NAME}.s3.amazonaws.com/${contents[i].Key}`
-//         );
-//       }
-//       console.log(keyArray);
-//       func(keyArray);
-//     }
-//   });
-// };
+// var stream = aws.s3("eyeknow-data").getObject(s3Path).createReadStream();
+// var proc = new ffmpeg(stream)
+//   .outputOptions(["-movflags isml+frag_keyframe"])
+//   .toFormat("mp4")
+//   .withAudioCodec("copy")
+//   //.seekInput(offset) this is a problem with piping
+//   .on("error", function (err, stdout, stderr) {
+//     console.log("an error happened: " + err.message);
+//     console.log("ffmpeg stdout: " + stdout);
+//     console.log("ffmpeg stderr: " + stderr);
+//   })
+//   .on("end", function () {
+//     console.log("Processing finished !");
+//   })
+//   .on("progress", function (progress) {
+//     console.log("Processing: " + progress.percent + "% done");
+//   })
+//   .pipe(res, { end: true });
