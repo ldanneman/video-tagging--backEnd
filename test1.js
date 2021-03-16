@@ -2,7 +2,7 @@ const axios = require("axios");
 var http = require("http");
 const https = require("https");
 var fs = require("fs");
-const Path = require("path");
+const path = require("path");
 const promisify = require("util.promisify");
 // import * as stream from "stream";
 const stream = require("stream");
@@ -66,7 +66,7 @@ const download4 = () => {
     console.log(response.data);
   });
 };
-download4();
+// download4();
 
 const download5 = () => {
   axios({
@@ -167,3 +167,7 @@ const download8 = () => {
 };
 
 // download8();
+const y = "test";
+
+const x = `Assets/${y}.mp4`;
+console.log(x);

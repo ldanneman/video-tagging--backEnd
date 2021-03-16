@@ -87,21 +87,45 @@ router.get("/", async (req, res, next) => {
 //   };
 // });
 
+const removeDir = function (path) {
+  if (fs.existsSync(path)) {
+    const files = fs.readdirSync(path);
+
+    if (files.length > 0) {
+      files.forEach(function (filename) {
+        if (fs.statSync(path + "/" + filename).isDirectory()) {
+          removeDir(path + "/" + filename);
+        } else {
+          fs.unlinkSync(path + "/" + filename);
+        }
+      });
+    } else {
+      console.log("No files found in the directory.");
+    }
+  } else {
+    console.log("Directory path not found.");
+  }
+};
+
+const pathToDir = path.join(__dirname, "../Assets/Videos/SV");
+
 router.post("/download", (req, res, next) => {
+  console.log("starting...");
   axios({
     method: "get",
     url: req.body.url,
     responseType: "arraybuffer",
   }).then(function (response) {
     const data = new Uint8Array(Buffer.from(response.data));
-    fs.writeFile("Assets/test51.mp4", data, callback);
+    fs.writeFile("Assets/Videos/SV/test1.mp4", data, callback);
   });
   const callback = (err) => {
     if (err) {
       throw err;
     } else {
+      const file = "Assets/Videos/FV/Ftest1.mp4";
       console.log("It's saved!");
-      var proc = new ffmpeg("Assets/test51.mp4")
+      var proc = new ffmpeg("Assets/Videos/SV/test1.mp4")
         .videoCodec("libx264")
         .outputOptions(["-movflags isml+frag_keyframe"])
         .toFormat("mp4")
@@ -118,8 +142,13 @@ router.post("/download", (req, res, next) => {
           console.log("Processing: " + progress.percent + "% done");
         })
         // .pipe(response.data, { end: true });
-        .pipe(fs.createWriteStream("Assets/test52.mp4", { flags: "w+" }));
+        .pipe(
+          fs.createWriteStream(file, {
+            flags: "w+",
+          })
+        );
     }
+    // removeDir(pathToDir);
   };
 });
 
@@ -159,7 +188,10 @@ router.post("/download", (req, res, next) => {
 // });
 
 router.get("/stream", function (req, res) {
-  const path = "Assets/test52.mp4";
+  console.log("querry", req.query.path);
+  // const q = req.query.path;
+  // res.end("I have received the ID: " + q);
+  const path = req.query.path;
   const stat = fs.statSync(path);
   const fileSize = stat.size;
   const range = req.headers.range;
