@@ -26,9 +26,16 @@ const videosRoutes = require("./Routes/videos");
 //   console.log("connected to DB")
 // );
 
+const corsOpts = {
+  origin: "*",
+
+  methods: ["GET", "POST"],
+
+  allowedHeaders: ["Content-Type"],
+};
 //Global Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOpts));
 
 //Routes Middlewares
 app.use("/api/videos", videosRoutes);
