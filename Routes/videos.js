@@ -113,10 +113,11 @@ router.post("/download", (req, res, next) => {
   for (let i = 0; i < req.body.length; i++) {
     let pathUrl = req.body[i].path + "";
     const reSlash = new RegExp(/\//g);
+    const lastMp4 = new RegExp(/mp4(?!.*mp4)/);
     let key = pathUrl
       .toString()
       .split("com/")[1]
-      .split("mp4")[0]
+      .split(lastMp4)[0]
       .replace(reSlash, "-");
     let fv = path.join(__dirname, `../Assets/Videos/FV/${key}mp4`);
     let sv = path.join(__dirname, `../Assets/Videos/SV/${key}mp4`);
@@ -184,6 +185,8 @@ router.post("/download", (req, res, next) => {
     // count();
   }
   let fileCount = fs.readdirSync("Assets/Videos/FV").length;
+  console.log(fileCount);
+  console.log(req.body.length);
 
   if (fileCount == req.body.length) {
     res.send("finished");

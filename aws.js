@@ -4,11 +4,13 @@ const ACCESS_KEY_ID = "AKIA6OHOPCC5DWJXXO7O";
 const SECRET_ACCESS_KEY = "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";
 // const BUCKET_NAME = "eyeknow-data";
 const BUCKET_NAME = "daycare.videos";
-
+//daycare.videos/YAMIT-RafiMvp/2020-11-05/cam0/aggressive/
 // const Prefix = "Test/";
-const Prefix = "little-brother/tzuzikim_paotot/2020-12-01/cam_MVP_0/";
+//daycare.videos/iland-guard/yamit/2021-03-15/cam_1/
+//daycare.videos/Little Brother/Agadata/2020-12-10/cam_MVP_0/aggressive/
+const Prefix = "iland-guard/yamit/2021-03-15/cam_1/";
 // const Prefix = "iland-guard/yamit/2020-12-09/cam_0/";
-
+//
 const Delimiter = "/";
 // const region = "us-east-1";
 const region = "eu-north-1";
