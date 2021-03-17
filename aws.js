@@ -6,7 +6,8 @@ const SECRET_ACCESS_KEY = "GdXjph5BlKJjelBPTlDWh3nmhtIYUBkcMrQBMKZh";
 const BUCKET_NAME = "daycare.videos";
 
 // const Prefix = "Test/";
-const Prefix = "iland-guard/yamit/2020-12-09/cam_0/";
+const Prefix = "little-brother/tzuzikim_paotot/2020-12-01/cam_MVP_0/";
+// const Prefix = "iland-guard/yamit/2020-12-09/cam_0/";
 
 const Delimiter = "/";
 // const region = "us-east-1";

@@ -110,47 +110,128 @@ const removeDir = function (path) {
 const pathToDir = path.join(__dirname, "../Assets/Videos/SV");
 
 router.post("/download", (req, res, next) => {
-  console.log("starting...");
-  axios({
-    method: "get",
-    url: req.body.url,
-    responseType: "arraybuffer",
-  }).then(function (response) {
-    const data = new Uint8Array(Buffer.from(response.data));
-    fs.writeFile("Assets/Videos/SV/test1.mp4", data, callback);
-  });
-  const callback = (err) => {
-    if (err) {
-      throw err;
+  for (let i = 0; i < req.body.length; i++) {
+    let pathUrl = req.body[i].path + "";
+    const reSlash = new RegExp(/\//g);
+    let key = pathUrl
+      .toString()
+      .split("com/")[1]
+      .split("mp4")[0]
+      .replace(reSlash, "-");
+    let fv = path.join(__dirname, `../Assets/Videos/FV/${key}mp4`);
+    let sv = path.join(__dirname, `../Assets/Videos/SV/${key}mp4`);
+    if (!fs.existsSync(fv)) {
+      console.log("starting...");
+      axios({
+        method: "get",
+        url: req.body[i].path,
+        responseType: "arraybuffer",
+      }).then(function (response) {
+        const data = new Uint8Array(Buffer.from(response.data));
+        fs.writeFile(sv, data, callback);
+      });
+      const callback = (err) => {
+        if (err) {
+          throw err;
+        } else {
+          const file = fv;
+          console.log("It's saved!");
+          var proc = new ffmpeg(sv)
+            .videoCodec("libx264")
+            .outputOptions(["-movflags isml+frag_keyframe"])
+            .toFormat("mp4")
+            //.seekInput(offset) this is a problem with piping
+            .on("error", function (err, stdout, stderr) {
+              console.log("an error happened: " + err.message);
+              console.log("ffmpeg stdout: " + stdout);
+              console.log("ffmpeg stderr: " + stderr);
+            })
+            .on("end", function () {
+              console.log("Processing finished !");
+              let fileCount = fs.readdirSync("Assets/Videos/FV").length;
+
+              if (fileCount == req.body.length) {
+                res.send("finished");
+              }
+            })
+            .on("progress", function (progress) {
+              console.log("Processing: " + progress.percent + "% done");
+            })
+            // .pipe(response.data, { end: true });
+            .pipe(
+              fs.createWriteStream(file, {
+                flags: "w+",
+              })
+            );
+        }
+        // removeDir(pathToDir);
+      };
     } else {
-      const file = "Assets/Videos/FV/Ftest1.mp4";
-      console.log("It's saved!");
-      var proc = new ffmpeg("Assets/Videos/SV/test1.mp4")
-        .videoCodec("libx264")
-        .outputOptions(["-movflags isml+frag_keyframe"])
-        .toFormat("mp4")
-        //.seekInput(offset) this is a problem with piping
-        .on("error", function (err, stdout, stderr) {
-          console.log("an error happened: " + err.message);
-          console.log("ffmpeg stdout: " + stdout);
-          console.log("ffmpeg stderr: " + stderr);
-        })
-        .on("end", function () {
-          console.log("Processing finished !");
-        })
-        .on("progress", function (progress) {
-          console.log("Processing: " + progress.percent + "% done");
-        })
-        // .pipe(response.data, { end: true });
-        .pipe(
-          fs.createWriteStream(file, {
-            flags: "w+",
-          })
-        );
+      console.log("the file already exists");
     }
-    // removeDir(pathToDir);
-  };
+    // const fileCount = (dir) => {
+    //   let count = fs.readdir(dir, (err, files) => {
+    //     console.log(files.length);
+    //   });
+    //   return count;
+    // };
+    // fileCount("../Assets/Videos/SV");
+
+    // let count = fs.readdir("Assets/Videos/FV", (err, files) => {
+    //   return files.length;
+    // });
+
+    // count();
+  }
+  let fileCount = fs.readdirSync("Assets/Videos/FV").length;
+
+  if (fileCount == req.body.length) {
+    res.send("finished");
+  }
 });
+
+// router.post("/download", (req, res, next) => {
+//   console.log("starting...");
+//   axios({
+//     method: "get",
+//     url: req.body.url,
+//     responseType: "arraybuffer",
+//   }).then(function (response) {
+//     const data = new Uint8Array(Buffer.from(response.data));
+//     fs.writeFile("Assets/Videos/SV/test1.mp4", data, callback);
+//   });
+//   const callback = (err) => {
+//     if (err) {
+//       throw err;
+//     } else {
+//       const file = "Assets/Videos/FV/Ftest1.mp4";
+//       console.log("It's saved!");
+//       var proc = new ffmpeg("Assets/Videos/SV/test1.mp4")
+//         .videoCodec("libx264")
+//         .outputOptions(["-movflags isml+frag_keyframe"])
+//         .toFormat("mp4")
+//         //.seekInput(offset) this is a problem with piping
+//         .on("error", function (err, stdout, stderr) {
+//           console.log("an error happened: " + err.message);
+//           console.log("ffmpeg stdout: " + stdout);
+//           console.log("ffmpeg stderr: " + stderr);
+//         })
+//         .on("end", function () {
+//           console.log("Processing finished !");
+//         })
+//         .on("progress", function (progress) {
+//           console.log("Processing: " + progress.percent + "% done");
+//         })
+//         // .pipe(response.data, { end: true });
+//         .pipe(
+//           fs.createWriteStream(file, {
+//             flags: "w+",
+//           })
+//         );
+//     }
+//     // removeDir(pathToDir);
+//   };
+// });
 
 // router.post("/download", (req, res, next) => {
 //   axios({
