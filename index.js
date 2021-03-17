@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-
+app.use(cors());
 //Import Routes
 const videosRoutes = require("./Routes/videos");
 
@@ -35,7 +35,6 @@ const corsOpts = {
 };
 //Global Middlewares
 app.use(express.json());
-app.use(cors(corsOpts));
 
 //Routes Middlewares
 app.use("/api/videos", videosRoutes);
