@@ -153,6 +153,7 @@ router.post("/download", (req, res, next) => {
 
               if (fileCount == req.body.length) {
                 removeDir(pathToDir);
+                res.header("Access-Control-Allow-Origin", "*");
                 res.send("finished");
               }
             })
@@ -190,8 +191,10 @@ router.post("/download", (req, res, next) => {
 
   if (fileCount == req.body.length) {
     removeDir(pathToDir);
+    res.header("Access-Control-Allow-Origin", "*");
     res.send("finished");
   }
+  res.header("Access-Control-Allow-Origin", "*");
 });
 
 // router.post("/download", (req, res, next) => {
