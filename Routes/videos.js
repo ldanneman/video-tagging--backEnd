@@ -152,6 +152,7 @@ router.post("/download", (req, res, next) => {
               let fileCount = fs.readdirSync("Assets/Videos/FV").length;
 
               if (fileCount == req.body.length) {
+                removeDir(pathToDir);
                 res.send("finished");
               }
             })
@@ -165,7 +166,6 @@ router.post("/download", (req, res, next) => {
               })
             );
         }
-        // removeDir(pathToDir);
       };
     } else {
       console.log("the file already exists");
@@ -189,6 +189,7 @@ router.post("/download", (req, res, next) => {
   console.log(req.body.length);
 
   if (fileCount == req.body.length) {
+    removeDir(pathToDir);
     res.send("finished");
   }
 });
@@ -300,6 +301,17 @@ router.get("/stream", function (req, res) {
     };
     res.writeHead(200, head);
     fs.createReadStream(path).pipe(res);
+  }
+});
+
+router.post("/deletefv", (req, res, next) => {
+  try {
+    const pathToFV = path.join(__dirname, "../Assets/Videos/FV");
+    removeDir(pathToFV);
+    removeDir(pathToDir);
+    res.send("Videos Deleted");
+  } catch (err) {
+    res.send(err);
   }
 });
 
