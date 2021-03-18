@@ -4,13 +4,13 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 app.use(cors());
-app.use(function (req, res, next) {
-  req.setHeader("Access-Control-Allow-Origin", "*");
-  req.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  req.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  req.setHeader("Access-Control-Allow-Credentials", true);
-  next();
-});
+// app.use(function (req, res, next) {
+//   req.setHeader("Access-Control-Allow-Origin", "*");
+//   req.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//   req.setHeader("Access-Control-Allow-Headers", "Content-Type");
+//   req.setHeader("Access-Control-Allow-Credentials", true);
+//   next();
+// });
 //Import Routes
 const videosRoutes = require("./Routes/videos");
 
