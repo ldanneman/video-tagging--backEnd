@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-app.use(cors());
+
 // app.use(function (req, res, next) {
 //   req.setHeader("Access-Control-Allow-Origin", "*");
 //   req.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -33,15 +33,16 @@ const videosRoutes = require("./Routes/videos");
 //   console.log("connected to DB")
 // );
 
-const corsOpts = {
-  origin: "*",
+// const corsOpts = {
+//   origin: "*",
 
-  methods: ["GET", "POST"],
+//   methods: ["GET", "POST"],
 
-  allowedHeaders: ["Content-Type"],
-};
+//   allowedHeaders: ["Content-Type"],
+// };
 //Global Middlewares
 app.use(express.json());
+app.use(cors());
 
 //Routes Middlewares
 app.use("/api/videos", videosRoutes);

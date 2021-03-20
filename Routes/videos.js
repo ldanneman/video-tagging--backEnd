@@ -152,9 +152,9 @@ router.post("/download", (req, res, next) => {
               let fileCount = fs.readdirSync("Assets/Videos/FV").length;
 
               if (fileCount == req.body.length) {
-                removeDir(pathToDir);
-                res.header("Access-Control-Allow-Origin", "*");
-                res.send("finished");
+                // removeDir(pathToDir);
+                // res.header("Access-Control-Allow-Origin", "*");
+                return res.send("finished");
               }
             })
             .on("progress", function (progress) {
@@ -190,11 +190,11 @@ router.post("/download", (req, res, next) => {
   console.log(req.body.length);
 
   if (fileCount == req.body.length) {
-    removeDir(pathToDir);
-    res.header("Access-Control-Allow-Origin", "*");
+    // removeDir(pathToDir);
+    // res.header("Access-Control-Allow-Origin", "*");
     res.send("finished");
   }
-  res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Origin", "*");
 });
 
 // router.post("/download", (req, res, next) => {
