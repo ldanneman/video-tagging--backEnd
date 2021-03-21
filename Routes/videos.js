@@ -110,6 +110,7 @@ const removeDir = function (path) {
 const pathToDir = path.join(__dirname, "../Assets/Videos/SV");
 
 router.post("/download", (req, res, next) => {
+  let fileCount = fs.readdirSync("Assets/Videos/FV").length;
   for (let i = 0; i < req.body.length; i++) {
     let pathUrl = req.body[i].path + "";
     const reSlash = new RegExp(/\//g);
@@ -148,8 +149,9 @@ router.post("/download", (req, res, next) => {
               console.log("ffmpeg stderr: " + stderr);
             })
             .on("end", function () {
+              fileCount++;
               console.log("Processing finished !");
-              let fileCount = fs.readdirSync("Assets/Videos/FV").length;
+              console.log("filecount", fileCount);
 
               if (fileCount == req.body.length) {
                 // removeDir(pathToDir);
@@ -185,9 +187,9 @@ router.post("/download", (req, res, next) => {
 
     // count();
   }
-  let fileCount = fs.readdirSync("Assets/Videos/FV").length;
-  console.log(fileCount);
-  console.log(req.body.length);
+
+  console.log("filecount", fileCount);
+  console.log("body", req.body.length);
 
   if (fileCount == req.body.length) {
     // removeDir(pathToDir);
