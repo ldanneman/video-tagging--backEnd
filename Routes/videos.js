@@ -128,10 +128,14 @@ router.post("/download", (req, res, next) => {
         method: "get",
         url: req.body[i].path,
         responseType: "arraybuffer",
-      }).then(function (response) {
-        const data = new Uint8Array(Buffer.from(response.data));
-        fs.writeFile(sv, data, callback);
-      });
+      })
+        .then(function (response) {
+          const data = new Uint8Array(Buffer.from(response.data));
+          fs.writeFile(sv, data, callback);
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
       const callback = (err) => {
         if (err) {
           throw err;
