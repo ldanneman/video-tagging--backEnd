@@ -157,7 +157,7 @@ router.post("/download", (req, res, next) => {
               console.log("Processing finished !");
               console.log("filecount", fileCount);
 
-              if (fileCount == req.body.length) {
+              if (fileCount == 2) {
                 // removeDir(pathToDir);
                 // res.header("Access-Control-Allow-Origin", "*");
                 return res.send("first finished");
@@ -195,7 +195,7 @@ router.post("/download", (req, res, next) => {
   console.log("filecount", fileCount);
   console.log("body", req.body.length);
 
-  if (fileCount == req.body.length) {
+  if (fileCount == req.body.length + 1) {
     // removeDir(pathToDir);
     // res.header("Access-Control-Allow-Origin", "*");
     return res.send("last finished");
