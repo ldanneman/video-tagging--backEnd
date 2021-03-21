@@ -154,7 +154,7 @@ router.post("/download", (req, res, next) => {
               if (fileCount == req.body.length) {
                 // removeDir(pathToDir);
                 // res.header("Access-Control-Allow-Origin", "*");
-                return res.send("finished");
+                return res.send("first finished");
               }
             })
             .on("progress", function (progress) {
@@ -192,7 +192,7 @@ router.post("/download", (req, res, next) => {
   if (fileCount == req.body.length) {
     // removeDir(pathToDir);
     // res.header("Access-Control-Allow-Origin", "*");
-    res.send("finished");
+    return res.send("last finished");
   }
   // res.header("Access-Control-Allow-Origin", "*");
 });
