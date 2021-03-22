@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const extendTimeout = require("./lib/middleware");
 
 // app.use(function (req, res, next) {
 //   req.setHeader("Access-Control-Allow-Origin", "*");
@@ -43,6 +44,7 @@ const videosRoutes = require("./Routes/videos");
 //Global Middlewares
 app.use(express.json());
 app.use(cors());
+// app.use(extendTimeout.extendTimeoutMiddleware);
 
 //Routes Middlewares
 app.use("/api/videos", videosRoutes);

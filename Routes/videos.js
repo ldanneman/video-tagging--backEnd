@@ -157,7 +157,7 @@ router.post("/download", (req, res, next) => {
               console.log("Processing finished !");
               console.log("filecount", fileCount);
 
-              if (fileCount == 1) {
+              if (fileCount == req.body.length) {
                 // removeDir(pathToDir);
                 // res.header("Access-Control-Allow-Origin", "*");
                 return res.send("first finished");

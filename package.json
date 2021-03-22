@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "ffmpeg": "0.0.4",
     "fluent-ffmpeg": "^2.1.2",
+    "http-delayed-response": "0.0.4",
     "mongoose": "^5.11.19",
     "nodemon": "^2.0.7",
     "s3-streams": "^0.4.0",
