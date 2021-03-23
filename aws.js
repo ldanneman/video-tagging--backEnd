@@ -8,7 +8,7 @@ const BUCKET_NAME = "daycare.videos";
 // const Prefix = "Test/";
 //daycare.videos/iland-guard/yamit/2021-03-15/cam_1/
 //daycare.videos/Little Brother/Agadata/2020-12-10/cam_MVP_0/aggressive/
-const Prefix = "iland-guard/yamit/2021-03-15/cam_1/";
+const Prefix = "Little Brother/Agadata/2020_12_21/Gdolim/aggressive/";
 // const Prefix = "iland-guard/yamit/2020-12-09/cam_0/";
 //
 const Delimiter = "/";
@@ -108,7 +108,7 @@ module.exports.list = (func) => {
         //   `https://s3.${region}.amazonaws.com/${BUCKET_NAME}/${contents[i].Key}`
         // );
       }
-      console.log(keyArray);
+      // console.log(keyArray);
       func(keyArray);
     }
   });
