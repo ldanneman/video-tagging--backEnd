@@ -3,23 +3,47 @@ const videoList = require("../aws");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const Raw_File = require("../Model/raw_file");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 router.get("/", async (req, res, next) => {
-  let videoURLs = videoList.list((videoURLs) => {
+  let videoURLs = videoList.list(async (videoURLs) => {
     try {
-      // console.log(videoURLs);
-      // console.log(typeof videoURLs);
-
       res.send(videoURLs);
     } catch (err) {
       console.log(err);
       res.status(403).send(err, "there was an err");
     }
+    for (let i = 0; i < videoURLs.length; i++) {
+      const reSlash = new RegExp(/\//g);
+      const lastMp4 = new RegExp(/mp4(?!.*mp4)/);
+      const lastSlash = new RegExp(/\/(?!.*\/)/);
+      let fileName = `${
+        videoURLs[i].split(lastMp4)[0].split(lastSlash)[1].split("mp4")[1]
+      }mp4`;
+      let s3Path = videoURLs[i].toString().split("com/")[1].split(lastMp4)[0];
+      const rawFilesExist = await Raw_File.findOne({ s3_path: s3Path });
+      if (!rawFilesExist) {
+        const rawFile = new Raw_File({
+          file_name: fileName,
+          s3_path: s3Path,
+          duration: null,
+          size: null,
+          incident_files: [],
+        });
+        try {
+          let savedRawFile = await rawFile.save();
+          console.log(`${fileName} is saved`);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        console.log(`${fileName} is already exists`);
+      }
+    }
   });
-  // console.log("the URls", videos);
 });
 
 // router.post("/download", (req, res, next) => {
@@ -229,7 +253,6 @@ router.post("/download", (req, res, next) => {
 });
 
 router.get("/stream", function (req, res) {
-  console.log("querry", req.query.path);
   // const q = req.query.path;
   // res.end("I have received the ID: " + q);
   const path = req.query.path;

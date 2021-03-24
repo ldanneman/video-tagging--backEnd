@@ -5,33 +5,29 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const extendTimeout = require("./lib/middleware");
 
-// app.use(function (req, res, next) {
-//   req.setHeader("Access-Control-Allow-Origin", "*");
-//   req.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//   req.setHeader("Access-Control-Allow-Headers", "Content-Type");
-//   req.setHeader("Access-Control-Allow-Credentials", true);
-//   next();
-// });
 //Import Routes
 const videosRoutes = require("./Routes/videos");
 
 //Connection to Database
-// dotenv.config();
-// const mongoConnection = process.env.MONGODB_URI || process.env.DB_CONNECT;
-// const options = {
-//   useUnifiedTopology: true,
-//   useNewUrlParser: true,
-//   useFindAndModify: false,
-// };
+dotenv.config();
+const mongoConnection = process.env.MONGODB_URI || process.env.DB_CONNECT;
+const options = {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useFindAndModify: false,
+};
+
+mongoose.connect(mongoConnection, options, (err) =>
+  err
+    ? console.log("there was an error connection to db", err)
+    : console.log("connected to DB")
+);
+
 // mongoose.set("useFindAndModify", false);
 // mongoose.connect(
 //   process.env.MONGODB_URI || process.env.DB_CONNECT,
 //   { useUnifiedTopology: true, useNewUrlParser: true },
 //   () => console.log("connected to DB")
-// );
-
-// mongoose.connect(mongoConnection, options, () =>
-//   console.log("connected to DB")
 // );
 
 // const corsOpts = {
