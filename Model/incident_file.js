@@ -14,6 +14,7 @@ const incidentSchema = new mongoose.Schema({
   raw_file_id: {
     type: String,
     required: true,
+    unique: true,
     max: 1000,
   },
   size: {
@@ -32,24 +33,22 @@ const incidentSchema = new mongoose.Schema({
     default: 0,
   },
   tags_for_review: {
-    date_time: {
-      type: Number,
-      required: true,
-      default: Date.now,
-    },
     internal_review: {
       reviewer: {
-        flag: { type: Boolean, required: true },
-        comments: { type: String },
+        date_time: { type: Date, default: Date.now },
+        flag: { type: Boolean, default: null },
+        comments: { type: String, default: null },
       },
       manager_review: {
-        flag: { type: Boolean, required: true },
-        comments: { type: String },
+        date_time: { type: Date, default: Date.now },
+        flag: { type: Boolean, default: null },
+        comments: { type: String, default: null },
       },
     },
     client_review: {
-      flag: { type: Boolean, required: true },
-      comments: { type: String },
+      date_time: { type: Date, default: Date.now },
+      flag: { type: Boolean, default: null },
+      comments: { type: String, default: null },
     },
   },
 });

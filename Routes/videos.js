@@ -4,6 +4,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const Raw_File = require("../Model/raw_file");
+const Incident_File = require("../Model/incident_file");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -23,7 +24,9 @@ router.get("/", async (req, res, next) => {
       let fileName = `${
         videoURLs[i].split(lastMp4)[0].split(lastSlash)[1].split("mp4")[1]
       }mp4`;
-      let s3Path = videoURLs[i].toString().split("com/")[1].split(lastMp4)[0];
+      let encoded = encodeURI(videoURLs[i]);
+      let s3Path =
+        encoded.toString().split("com/")[1].split(lastMp4)[0] + "mp4";
       const rawFilesExist = await Raw_File.findOne({ s3_path: s3Path });
       if (!rawFilesExist) {
         const rawFile = new Raw_File({
@@ -40,7 +43,7 @@ router.get("/", async (req, res, next) => {
           console.log(err);
         }
       } else {
-        console.log(`${fileName} is already exists`);
+        console.log(`${fileName} already exists`);
       }
     }
   });
@@ -291,6 +294,80 @@ router.post("/deletefv", (req, res, next) => {
     res.send("Videos Deleted");
   } catch (err) {
     res.send(err);
+  }
+});
+
+router.post("/tag", async function (req, res) {
+  console.log("tagged", typeof req.body.flag);
+  const incidentFilesExist = await Incident_File.findOne({
+    s3_path: req.body.s3_path,
+  });
+
+  if (incidentFilesExist) {
+    try {
+      Incident_File.updateOne(
+        { _id: incidentFilesExist._id },
+        { flag: req.body.flag },
+        function (err, result) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(result);
+          }
+        }
+      );
+    } catch (err) {
+      res.status(400).send(err);
+    }
+  } else {
+    let rawFile = await Raw_File.findOne({ s3_path: req.body.s3_path });
+    let US = req.body.user_status;
+
+    const incident = new Incident_File({
+      file_name: rawFile.file_name,
+      s3_path: rawFile.s3_path,
+      raw_file_id: rawFile._id,
+      size: req.body.size ?? undefined,
+      duration: req.body.duration ?? undefined,
+      classifier_id: req.body.classifier_id ?? undefined,
+      tags_for_review: {
+        internal_review: {
+          reviewer: {
+            ...(US == 1
+              ? {
+                  date_time: undefined,
+                  flag: req.body.flag,
+                  comments: req.body.comments,
+                }
+              : { date_time: null, flag: undefined, comments: undefined }),
+          },
+          manager_review: {
+            ...(US == 2
+              ? {
+                  date_time: undefined,
+                  flag: req.body.flag,
+                  comments: req.body.comments,
+                }
+              : { date_time: null, flag: undefined, comments: undefined }),
+          },
+        },
+        client_review: {
+          ...(US == 3
+            ? {
+                date_time: undefined,
+                flag: req.body.flag,
+                comments: req.body.comments,
+              }
+            : { date_time: null, flag: undefined, comments: undefined }),
+        },
+      },
+    });
+    try {
+      const savedIncident = await incident.save();
+      res.send("Incident Saved");
+    } catch (err) {
+      res.status(400).send(err);
+    }
   }
 });
 
