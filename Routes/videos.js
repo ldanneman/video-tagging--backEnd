@@ -298,16 +298,40 @@ router.post("/deletefv", (req, res, next) => {
 });
 
 router.post("/tag", async function (req, res) {
-  console.log("tagged", typeof req.body.flag);
+  let US = req.body.user_status;
   const incidentFilesExist = await Incident_File.findOne({
     s3_path: req.body.s3_path,
   });
 
   if (incidentFilesExist) {
+    let updateParams = {};
+    switch (US) {
+      case 1:
+        updateParams = {
+          "tags_for_review.internal_review.reviewer.flag": req.body.flag,
+          "tags_for_review.internal_review.reviewer.comments":
+            req.body.comments,
+        };
+        break;
+      case 2:
+        updateParams = {
+          "tags_for_review.internal_review.manager_review.flag": req.body.flag,
+          "tags_for_review.internal_review.manager_review.comments":
+            req.body.comments,
+        };
+
+        break;
+      case 3:
+        updateParams = {
+          "tags_for_review.client_review.flag": req.body.flag,
+          "tags_for_review.client_review.comments": req.body.comments,
+        };
+        break;
+    }
     try {
       Incident_File.updateOne(
         { _id: incidentFilesExist._id },
-        { flag: req.body.flag },
+        updateParams,
         function (err, result) {
           if (err) {
             res.send(err);
@@ -321,7 +345,6 @@ router.post("/tag", async function (req, res) {
     }
   } else {
     let rawFile = await Raw_File.findOne({ s3_path: req.body.s3_path });
-    let US = req.body.user_status;
 
     const incident = new Incident_File({
       file_name: rawFile.file_name,
