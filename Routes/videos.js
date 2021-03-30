@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const videoList = require("../aws");
+const videoList = require("../lib/aws");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
