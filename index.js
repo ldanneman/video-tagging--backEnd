@@ -19,24 +19,10 @@ const options = {
 
 mongoose.connect(mongoConnection, options, (err) =>
   err
-    ? console.log("there was an error connection to db", err)
+    ? console.log("there was an error connecting to db", err)
     : console.log("connected to DB")
 );
 
-// mongoose.set("useFindAndModify", false);
-// mongoose.connect(
-//   process.env.MONGODB_URI || process.env.DB_CONNECT,
-//   { useUnifiedTopology: true, useNewUrlParser: true },
-//   () => console.log("connected to DB")
-// );
-
-// const corsOpts = {
-//   origin: "*",
-
-//   methods: ["GET", "POST"],
-
-//   allowedHeaders: ["Content-Type"],
-// };
 //Global Middlewares
 app.use(express.json());
 app.use(cors());
@@ -47,4 +33,8 @@ app.use("/api/videos", videosRoutes);
 
 //Server Initiation
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.listen(PORT, (err) =>
+  err
+    ? console.log("there was a server error")
+    : console.log(`Server is running on port ${PORT}`)
+);

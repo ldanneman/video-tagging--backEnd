@@ -103,3 +103,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+#MISC
+/test1.js
+/test2.js
