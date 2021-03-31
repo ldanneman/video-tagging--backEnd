@@ -7,11 +7,12 @@
     "start": "nodemon index.js",
     "github": "git add . && git commit -m",
     "postgithub": "git push origin --all",
-     "heroku": "git add . && git commit -m",
+    "heroku": "git add . && git commit -m",
     "postheroku": "git push heroku --all",
-     "gitall": "git add . && git commit -m",
+    "gitall": "git add . && git commit -m",
     "postgitall": "git push origin --all && git push heroku --all",
-    "github2": "bash ./Scripts/github.sh"
+    "github2": "bash ./Scripts/github.sh",
+    "tag": "bash ./Scripts/tag.sh"
   },
   "author": "Lev Danneman <Levdanneman@gmail.com> (https://ldanneman.github.io/)",
   "license": "UNLICENSED",
