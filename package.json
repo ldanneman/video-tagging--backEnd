@@ -6,7 +6,12 @@
   "scripts": {
     "start": "nodemon index.js",
     "github": "git add . && git commit -m",
-    "postgithub": "git push origin --all"
+    "postgithub": "git push origin --all",
+     "heroku": "git add . && git commit -m",
+    "postheroku": "git push heroku --all",
+     "gitall": "git add . && git commit -m",
+    "postgitall": "git push origin --all && git push heroku --all",
+    "bash-hello": "bash hello.sh"
   },
   "author": "Lev Danneman <Levdanneman@gmail.com> (https://ldanneman.github.io/)",
   "license": "UNLICENSED",
