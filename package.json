@@ -11,7 +11,7 @@
     "postheroku": "git push heroku --all",
      "gitall": "git add . && git commit -m",
     "postgitall": "git push origin --all && git push heroku --all",
-    "bash-hello": "bash hello.sh"
+    "github2": "bash ./Scripts/github.sh"
   },
   "author": "Lev Danneman <Levdanneman@gmail.com> (https://ldanneman.github.io/)",
   "license": "UNLICENSED",
