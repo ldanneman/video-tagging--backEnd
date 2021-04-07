@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     min: 6,
     max: 1000,
-    select: false,
+    // select: false,
   },
   companyID: {
     type: String,
