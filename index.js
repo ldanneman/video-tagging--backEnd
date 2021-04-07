@@ -7,6 +7,8 @@ const extendTimeout = require("./lib/middleware");
 
 //Import Routes
 const videosRoutes = require("./Routes/videos");
+const authRoutes = require("./Routes/auth");
+const dataRoutes = require("./Routes/data");
 
 //Connection to Database
 dotenv.config();
@@ -30,6 +32,8 @@ app.use(cors());
 
 //Routes Middlewares
 app.use("/api/videos", videosRoutes);
+app.use("/api/user", authRoutes);
+app.use("/api/data", dataRoutes);
 
 //Server Initiation
 const PORT = process.env.PORT || 5000;

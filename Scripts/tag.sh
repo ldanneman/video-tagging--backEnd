@@ -5,5 +5,5 @@ read version
 git add -A
 git commit -m $version
 git tag -a v$version -m $version
-git push origin $version
+git push origin v$version
 

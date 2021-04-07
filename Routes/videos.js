@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const Raw_File = require("../Model/raw_file");
 const Incident_File = require("../Model/incident_file");
+const authorize = require("../lib/auth");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -49,8 +50,7 @@ router.get("/", async (req, res, next) => {
   });
 });
 
-
-router.post("/download", (req, res, next) => {
+router.post("/download", authorize.user, (req, res, next) => {
   let pathUrl = req.body.path + "";
   const reSlash = new RegExp(/\//g);
   const lastMp4 = new RegExp(/mp4(?!.*mp4)/);
@@ -93,7 +93,7 @@ router.post("/download", (req, res, next) => {
           })
           .on("end", function () {
             console.log("Processing finished !");
-            return res.send("first finished");
+            return res.status(200).send("first finished");
           })
           .on("progress", function (progress) {
             console.log("Processing: " + progress.percent + "% done");
@@ -108,7 +108,7 @@ router.post("/download", (req, res, next) => {
     };
   } else {
     console.log("the file already exists");
-    res.send("last finished");
+    res.status(200).send("last finished");
   }
 });
 
