@@ -11,6 +11,7 @@ const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 router.get("/", async (req, res, next) => {
+  console.log("goodbye");
   let videoURLs = videoList.list(async (videoURLs) => {
     try {
       res.send(videoURLs);
