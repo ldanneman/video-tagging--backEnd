@@ -11,7 +11,6 @@ const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 router.get("/", async (req, res, next) => {
-  console.log("goodbye");
   let videoURLs = videoList.list(async (videoURLs) => {
     try {
       res.send(videoURLs);
@@ -47,6 +46,17 @@ router.get("/", async (req, res, next) => {
       } else {
         console.log(`${fileName} already exists`);
       }
+    }
+  });
+});
+
+router.get("/testing", async (req, res, next) => {
+  let videos = videoList.fullList(async (videoURLs) => {
+    try {
+      res.send(videoURLs);
+    } catch (err) {
+      console.log(err);
+      res.status(403).send(err, "there was an err");
     }
   });
 });
