@@ -30,6 +30,9 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 3,
   },
+  facilities: {
+    type: Array,
+  },
   date: {
     type: Date,
     default: Date.now,

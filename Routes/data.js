@@ -4,12 +4,14 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 router.all("/users", async (req, res) => {
-  const usersData = await User.find({});
+  const usersData = await User.find().select("-password");
   res.send(usersData);
 });
 
 router.post("/updateuser", async (req, res) => {
   console.log(req.body);
+  let facilitiesArray = req.body.facilities.split(",");
+  console.log(facilitiesArray);
   let hashedPassword = "";
   if (req.body.password) {
     const salt = await bcrypt.genSalt(10);
@@ -27,6 +29,7 @@ router.post("/updateuser", async (req, res) => {
         email: req.body.email,
         companyID: req.body.companyID,
         role: req.body.role,
+        facilities: facilitiesArray,
         ...(req.body.password && { password: hashedPassword }),
       },
       function (err, result) {

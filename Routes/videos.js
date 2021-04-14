@@ -52,6 +52,9 @@ router.get("/", async (req, res, next) => {
 
 router.get("/testing", async (req, res, next) => {
   let videos = videoList.fullList(async (videoURLs) => {
+    // const lastSlash = new RegExp(/\/(?!.*\/)/);
+
+    // console.log(hello.replace(lastSlash, ""));
     try {
       res.send(videoURLs);
     } catch (err) {
