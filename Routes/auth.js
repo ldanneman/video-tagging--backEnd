@@ -37,7 +37,16 @@ router.post("/login", async (req, res) => {
   if (!validPassword) return res.status(400).send("Invalid Password");
 
   //create and assign JWT
-  const userInfo = [user._id, user.name, user.email, user.role];
+  const userInfo = [
+    user._id,
+    user.name,
+    user.email,
+    user.role,
+    user.facilities,
+    user.aws_access.Bucket,
+    user.aws_access.Prefix,
+    user.aws_access.Delimiter,
+  ];
   const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
   res.header("auth-token", token).send([token, userInfo]);
 });

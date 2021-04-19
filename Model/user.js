@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema({
   facilities: {
     type: Array,
   },
+<<<<<<< HEAD
+=======
+  aws_access: {
+    type: Object,
+  },
+>>>>>>> filesystem
   date: {
     type: Date,
     default: Date.now,

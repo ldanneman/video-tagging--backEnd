@@ -50,6 +50,73 @@ router.get("/", async (req, res, next) => {
   });
 });
 
+router.post("/get-videos", (req, res, next) => {
+  console.log("REQUEST BODY",req.body);
+  const params = {
+    Bucket: req.body.Bucket,
+    Prefix: req.body.Prefix,
+    Delimiter: req.body.Delimiter,
+  };
+  let videoURLs = videoList.list2(params, async (videoURLs) => {
+    try {
+      res.send(videoURLs);
+    } catch (err) {
+      console.log(err);
+      res.status(403).send(err, "there was an err");
+    }
+    for (let i = 0; i < videoURLs.length; i++) {
+      const reSlash = new RegExp(/\//g);
+      const lastMp4 = new RegExp(/mp4(?!.*mp4)/);
+      const lastSlash = new RegExp(/\/(?!.*\/)/);
+      let fileName = `${
+        videoURLs[i].split(lastMp4)[0].split(lastSlash)[1].split("mp4")[1]
+      }mp4`;
+      let encoded = encodeURI(videoURLs[i]);
+      let s3Path =
+        encoded.toString().split("com/")[1].split(lastMp4)[0] + "mp4";
+      const rawFilesExist = await Raw_File.findOne({ s3_path: s3Path });
+      if (!rawFilesExist) {
+        const rawFile = new Raw_File({
+          file_name: fileName,
+          s3_path: s3Path,
+          duration: null,
+          size: null,
+          incident_files: [],
+        });
+        try {
+          let savedRawFile = await rawFile.save();
+          console.log(`${fileName} is saved`);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        console.log(`${fileName} already exists`);
+      }
+    }
+  });
+  // return console.log(videoURLs);
+});
+
+router.get("/testing2", async (req, res, next) => {
+  const objects = {
+    Bucket: "daycare.videos",
+    Delimiter: "/",
+    Prefix: "",
+  };
+
+  let videoURLs = videoList.fullList2(req.body, (videoURLs) => {
+    console.log(objects);
+    // return [...videoURLs, 100];
+    try {
+      res.send(videoURLs);
+    } catch (err) {
+      console.log(err);
+      res.status(403).send(err, "there was an err");
+    }
+  });
+  // return console.log(videoURLs);
+});
+
 router.get("/testing", async (req, res, next) => {
   let videos = videoList.fullList(async (videoURLs) => {
     // const lastSlash = new RegExp(/\/(?!.*\/)/);
