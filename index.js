@@ -3,13 +3,11 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const extendTimeout = require("./lib/middleware");
 
 //Import Routes
 const videosRoutes = require("./Routes/videos");
 const authRoutes = require("./Routes/auth");
 const dataRoutes = require("./Routes/data");
-
 //Connection to Database
 dotenv.config();
 const mongoConnection = process.env.MONGODB_URI || process.env.DB_CONNECT;

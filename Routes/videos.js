@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const Raw_File = require("../Model/raw_file");
 const Incident_File = require("../Model/incident_file");
+const videoController = require("../Controller/videoController");
 const authorize = require("../lib/auth");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
@@ -51,7 +52,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/get-videos", (req, res, next) => {
-  console.log("REQUEST BODY",req.body);
+  console.log("REQUEST BODY", req.body);
   const params = {
     Bucket: req.body.Bucket,
     Prefix: req.body.Prefix,
@@ -98,14 +99,7 @@ router.post("/get-videos", (req, res, next) => {
 });
 
 router.get("/testing2", async (req, res, next) => {
-  const objects = {
-    Bucket: "daycare.videos",
-    Delimiter: "/",
-    Prefix: "",
-  };
-
-  let videoURLs = videoList.fullList2(req.body, (videoURLs) => {
-    console.log(objects);
+  let videoURLs = videoList.fullList22(req.body, (videoURLs) => {
     // return [...videoURLs, 100];
     try {
       res.send(videoURLs);
@@ -131,67 +125,21 @@ router.get("/testing", async (req, res, next) => {
   });
 });
 
-router.post("/download", authorize.user, (req, res, next) => {
-  let pathUrl = req.body.path + "";
-  const reSlash = new RegExp(/\//g);
-  const lastMp4 = new RegExp(/mp4(?!.*mp4)/);
-  let key = pathUrl
-    .toString()
-    .split("com/")[1]
-    .split(lastMp4)[0]
-    .replace(reSlash, "-");
-  let fv = path.join(__dirname, `../Assets/Videos/FV/${key}mp4`);
-  let sv = path.join(__dirname, `../Assets/Videos/SV/${key}mp4`);
-  if (!fs.existsSync(fv)) {
-    console.log("starting...");
-    axios({
-      method: "get",
-      url: req.body.path,
-      responseType: "arraybuffer",
-    })
-      .then(function (response) {
-        const data = new Uint8Array(Buffer.from(response.data));
-        fs.writeFile(sv, data, callback);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-    const callback = (err) => {
-      if (err) {
-        throw err;
-      } else {
-        const file = fv;
-        console.log("It's saved!");
-        var proc = new ffmpeg(sv)
-          .videoCodec("libx264")
-          .outputOptions(["-movflags isml+frag_keyframe"])
-          .toFormat("mp4")
-          //.seekInput(offset) this is a problem with piping
-          .on("error", function (err, stdout, stderr) {
-            console.log("an error happened: " + err.message);
-            console.log("ffmpeg stdout: " + stdout);
-            console.log("ffmpeg stderr: " + stderr);
-          })
-          .on("end", function () {
-            console.log("Processing finished !");
-            return res.status(200).send("first finished");
-          })
-          .on("progress", function (progress) {
-            console.log("Processing: " + progress.percent + "% done");
-          })
-          // .pipe(response.data, { end: true });
-          .pipe(
-            fs.createWriteStream(file, {
-              flags: "w+",
-            })
-          );
-      }
-    };
-  } else {
-    console.log("the file already exists");
-    res.status(200).send("last finished");
-  }
+router.get("/testing4", async (req, res, next) => {
+  let videos = videoList.list3(req.body, (videoURLs) => {
+    // const lastSlash = new RegExp(/\/(?!.*\/)/);
+
+    // console.log(hello.replace(lastSlash, ""));
+    try {
+      res.send(videoURLs);
+    } catch (err) {
+      console.log(err);
+      res.status(403).send(err, "there was an err");
+    }
+  });
 });
+
+router.post("/download", authorize.user, videoController.download);
 
 router.get("/stream", function (req, res) {
   const path = req.query.path;
