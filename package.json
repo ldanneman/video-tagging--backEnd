@@ -14,7 +14,9 @@
     "github2": "bash ./Scripts/github.sh",
     "tag": "bash ./Scripts/tag.sh",
     "heroku2": "bash ./Scripts/heroku.sh",
-    "gitall2": "bash ./Scripts/gitall.sh"
+    "gitall2": "bash ./Scripts/gitall.sh",
+    "test": "python ./Scripts/test.py",
+    "test2": "bash ./Scripts/test2.sh"
   },
   "author": "Lev Danneman <Levdanneman@gmail.com> (https://ldanneman.github.io/)",
   "license": "UNLICENSED",
