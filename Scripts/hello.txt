@@ -1,1 +1,2 @@
-goodbye this is txt
+goodbye dkfk is txt
+const one = two

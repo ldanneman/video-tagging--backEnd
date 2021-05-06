@@ -1,1 +1,5 @@
-goodbye this is the txt file
+goodbye foo is a test tesxt
+const hello = person.tex
+const goodbye = monster.lllkjdflj
+const smile = ojfldjlf
+There are 12 processes running > dkjfkjd> dsjldj >

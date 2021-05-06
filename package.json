@@ -16,7 +16,8 @@
     "heroku2": "bash ./Scripts/heroku.sh",
     "gitall2": "bash ./Scripts/gitall.sh",
     "test": "python ./Scripts/test.py",
-    "test2": "bash ./Scripts/test2.sh"
+    "test2": "bash ./Scripts/test2.sh",
+    "test3": "node ./Scripts/ww.js"
   },
   "author": "Lev Danneman <Levdanneman@gmail.com> (https://ldanneman.github.io/)",
   "license": "UNLICENSED",
